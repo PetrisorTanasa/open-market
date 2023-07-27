@@ -5,8 +5,11 @@
     <table id="datatable">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Email</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Actions</th>
             <!-- Add more columns here as needed -->
         </tr>
         </thead>
@@ -30,15 +33,15 @@
             $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: {
-                    url: '{{ path('app_product_read') }}',
-                    type: 'GET',
-                },
                 columns: [
-                    { data: 'name' },
-                    { data: 'email' },
+                    { data: 'product' },
+                    { data: 'quantity' },
+                    { data: 'price' },
+                    { data: 'description' },
+                    { data: 'id'},
                     // Add more columns here as needed
                 ],
+                // ... other DataTable options ...
             });
         });
     </script>

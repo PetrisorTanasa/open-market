@@ -16,9 +16,50 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProductRepository extends ServiceEntityRepository
 {
+    private ManagerRegistry $entityManager;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
+        $this->entityManager = $registry;
+    }
+
+    public function createProduct(Product $product, int $userId)
+    {
+        $product->setUserId($userId);
+
+        $entityManager = $this->entityManager->getManager();
+        $entityManager->persist($product);
+        $entityManager->flush();
+    }
+
+    public function readProduct(int $userId, array $orderBy = [])
+    {
+        $entityManager = $this->entityManager->getManager();
+//        $products = $entityManager->getRepository(Product::class)->findBy(['user_id' => $userId]);
+//
+//        $productArray = [];
+//        foreach ($products as $product) {
+//            $productArray[] = [
+//                'product' => $product->getProduct(),
+//                'quantity' => $product->getQuantity(),
+//                'price' => $product->getPrice(),
+//                'description' => $product->getDescription()
+//            ];
+//        }
+//
+//        return $productArray;
+        $queryBuilder = $this->createQueryBuilder('p')->andWhere('p.user_id = ' . $userId);
+
+        foreach ($orderBy as $field => $dir) {
+            $queryBuilder->orderBy('p.' . $field, $dir);
+        }
+
+        $query = $queryBuilder->getQuery();
+        $result = $query->getResult();
+
+        // You can format the result array as needed, such as converting to associative arrays.
+
+        return $result;
     }
 
 //    /**

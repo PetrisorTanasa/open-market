@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Services\ProductService;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,13 +19,20 @@ class ProductController extends AbstractController
 
     private $user;
 
-    public function __construct(TokenStorageInterface $tokenStorage)
+    private ProductService $productService;
+
+    public function __construct(
+        TokenStorageInterface $tokenStorage,
+        ProductService $productService,
+        ManagerRegistry $managerRegistry
+    )
     {
         $this->tokenStorage = $tokenStorage->getToken();
         $this->user = $this->tokenStorage->getUser();
+        $this->productService = new ProductService($managerRegistry);
     }
 
-    #[Route('/product/create', name: 'app_product_create', methods: ['POST'])]
+    #[Route('/product/create', name: 'app_product_create', methods: ['GET', 'POST'])]
     public function productCreate(Request $request): Response
     {
         $product = new Product();
@@ -32,13 +41,12 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Save the product to the database or perform other actions
-            // For example:
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($product);
-            // $entityManager->flush();
 
-            // Redirect to a success page or show a success message
+            $this->productService->createProduct(
+                $product,
+                $this->user->getId()
+            );
+
             return $this->redirectToRoute('home');
         }
 
@@ -48,18 +56,42 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/read', name: 'app_product_read', methods: ['GET'])]
-    public function productRead(): Response
+    public function productRead(Request $request): Response
     {
-        $data = [
-        ['name' => 'John Doe', 'email' => 'john@example.com'],
-        ['name' => 'Jane Smith', 'email' => 'jane@example.com'],
-        ];
-        return new JsonResponse(['data' => $data]);
+        $allParameters = $request->query->all();
+        $columns = $allParameters['columns'] ?? [];
+        $order = $allParameters['order'] ?? [];
+
+        $orderBy = [];
+        foreach ($order as $orderItem) {
+            $columnIdx = $orderItem['column'] ?? null;
+            $dir = $orderItem['dir'] ?? 'asc';
+
+            if (isset($columns[$columnIdx]['data']) && in_array($dir, ['asc', 'desc'])) {
+                $column = $columns[$columnIdx]['data'];
+                // Map the column data to the actual entity field names as needed
+                // For example, if your column 'data' is 'product', but the actual entity field is 'name',
+                // then you should map it here.
+                $orderBy[$column] = $dir;
+            }
+        }
+
+        $data = $this->productService->readProduct(
+            $this->user->getId(),
+            $orderBy
+        );
+
+        return $this->json([
+            'data' => $data,
+        ]);
     }
 
-    #[Route('/product/update', name: 'app_product_update')]
+    #[Route('/product/{id}/update', name: 'app_product_update')]
     public function productUpdate(): Response
     {
+        //Update product
+
+
         return $this->render('product/index.html.twig', [
             'controller_name' => 'ProductController',
         ]);

@@ -1,0 +1,15 @@
+{# templates/product/create.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Create Product</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.product) }}
+    {{ form_row(form.quantity) }}
+    {{ form_row(form.price) }}
+    {{ form_row(form.description) }}
+
+    <button type="submit">Create Product</button>
+    {{ form_end(form) }}
+{% endblock %}
