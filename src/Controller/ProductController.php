@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Services\ProductService;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -59,8 +60,10 @@ class ProductController extends AbstractController
     public function productRead(Request $request): Response
     {
         $allParameters = $request->query->all();
+
         $columns = $allParameters['columns'] ?? [];
         $order = $allParameters['order'] ?? [];
+        $searchTerm = $allParameters['search']['value'] ?? null;
 
         $orderBy = [];
         foreach ($order as $orderItem) {
@@ -78,7 +81,8 @@ class ProductController extends AbstractController
 
         $data = $this->productService->readProduct(
             $this->user->getId(),
-            $orderBy
+            $orderBy ?? [],
+            $searchTerm ?? ""
         );
 
         return $this->json([
@@ -87,20 +91,27 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/{id}/update', name: 'app_product_update')]
-    public function productUpdate(): Response
+    public function update(Request $request, EntityManagerInterface $entityManager, Product $product): Response
     {
-        //Update product
+        $form = $this->createForm(ProductType::class, $product);
 
+        $form->handleRequest($request);
 
-        return $this->render('product/index.html.twig', [
-            'controller_name' => 'ProductController',
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('product/update.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
     #[Route('/product/delete', name: 'app_product_delete')]
     public function productDelete(): Response
     {
-        return $this->render('product/index.html.twig', [
+        return $this->render('product/delete.html.twig', [
             'controller_name' => 'ProductController',
         ]);
     }

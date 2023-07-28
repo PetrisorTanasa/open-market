@@ -1,0 +1,25 @@
+{# templates/profile/edit.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block body %}
+    <h1>Edit Profile</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit">Update</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{# templates/profile/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block body %}
+    <h1>User Profile</h1>
+    <p>First Name: {{ user.profile.firstName }}</p>
+    <p>Last Name: {{ user.profile.lastName }}</p>
+    {# Add more profile fields here if needed #}
+    <a href="{{ path('profile_edit') }}">Edit Profile</a>
+{% endblock %}
