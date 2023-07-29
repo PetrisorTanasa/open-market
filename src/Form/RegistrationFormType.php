@@ -43,8 +43,12 @@ class RegistrationFormType extends AbstractType
                     'English' => 'en',
                     'French' => 'fr',
                 ],
+                'attr' => [
+                    'class' => 'custom-language-field', // Add a custom class to the field
+                ],
             ])
-            ->add('password', PasswordType::class, [
+            ->add('plainPassword', PasswordType::class, [
+                'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([

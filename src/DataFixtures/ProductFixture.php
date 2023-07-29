@@ -13,61 +13,25 @@ class ProductFixture extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-//        $this->loadUsers($manager);
+        //$this->loadUsers($manager);
         $this->loadProducts($manager);
     }
 
     private function loadUsers(ObjectManager $manager){
-        $emails = [
-            "fptanasa02@yahoo.com",
-            "john.doe@emag.ro",
-            "jane.doe@emag.ro"
-        ];
-        $firstNames = [
-            'Petrisor',
-            'John',
-            'Jane',
-        ];
-
-        $lastNames = [
-            'Tanasa',
-            'John',
-            'Jane',
-        ];
-
-        $passwords = [
-            'petrisor.tanasa',
-            'john.doe',
-            'jane.doe',
-        ];
-
-        $language = [
-            'en',
-            'en',
-            'fr',
-        ];
-
-
-
-        for($i=0; $i<count($emails); $i++) {
-            $user = new User();
-            $user->setEmail($emails[$i]);
-            $user->setFirstName($firstNames[$i]);
-            $user->setLastName($lastNames[$i]);
-            $user->setPassword(base64_encode($emails[$i] . ':' . $passwords[$i]));
-            $user->setLanguage($language[$i]);
-
-            $manager->persist($user);
-        }
-
-        $manager->flush();
+//        $user = new User();
+//        $user->setId(8);
+//        $user->setEmail('fptanasa02@yahoo.com');
+//        $user->setPassword('$2y$13$//4ATEoZZKB/m.IlJFq9LenWC2QAE3Pv3vVqUrQU.TL...');
+//        $user->setRoles([]);
+//        $user->setLanguage('fr');
+//        $user->setFirstname('petrisor');
+//        $user->setLastname('tanasa');
+//        $manager->persist($user);
+//        $manager->flush();
     }
 
     private function loadProducts(ObjectManager $manager){
-//        $users = $manager->getRepository(User::class)->findAll();
-//        $userIds = array_map(function($user) {
-//            return $user->getId();
-//        }, $users);
+
         $productNames = [
             'Smartphone',
             'Laptop',
