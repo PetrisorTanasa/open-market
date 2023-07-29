@@ -13,21 +13,7 @@ class ProductFixture extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        //$this->loadUsers($manager);
         $this->loadProducts($manager);
-    }
-
-    private function loadUsers(ObjectManager $manager){
-//        $user = new User();
-//        $user->setId(8);
-//        $user->setEmail('fptanasa02@yahoo.com');
-//        $user->setPassword('$2y$13$//4ATEoZZKB/m.IlJFq9LenWC2QAE3Pv3vVqUrQU.TL...');
-//        $user->setRoles([]);
-//        $user->setLanguage('fr');
-//        $user->setFirstname('petrisor');
-//        $user->setLastname('tanasa');
-//        $manager->persist($user);
-//        $manager->flush();
     }
 
     private function loadProducts(ObjectManager $manager){

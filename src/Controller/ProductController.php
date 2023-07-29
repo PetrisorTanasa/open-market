@@ -121,10 +121,10 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/{id}/delete', name: 'app_product_delete')]
-    public function productDelete(Request $request)
+    public function productDelete(Request $request, $id)
     {
-        $productId = $request->request->get('id');
-        $this->productService->deleteProduct($productId);
+        var_dump($id);
+        $this->productService->deleteProduct($id);
         return $this->redirectToRoute('home');
     }
 }
