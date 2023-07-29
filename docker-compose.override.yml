@@ -1,14 +1,27 @@
-version: '3'
+version: '3.8'
 
 services:
-###> doctrine/doctrine-bundle ###
-  database:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "5432"
-###< doctrine/doctrine-bundle ###
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
 
-###> symfony/mailer ###
-  mailer:
-    image: schickling/mailcatcher
-    ports: ["1025", "1080"]
-###< symfony/mailer ###
+  db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: open-market
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
