@@ -22,12 +22,18 @@ class ProductService
         $this->productRepository->createProduct($product, $userId);
     }
 
-    public function readProduct(int $userId, array $orderBy, string $search)
+    public function readProduct(int $userId, array $orderBy, string $search, int $page, int $limit)
     {
-        return $this->productRepository->readProduct($userId, $orderBy, $search);
+        return $this->productRepository->readProduct($userId, $orderBy, $search, $page, $limit);
     }
 
-    public function deleteProduct()
+    public function deleteProduct(int $productId)
     {
+        $this->productRepository->deleteProduct($productId);
+    }
+
+    public function getCount(int $userId)
+    {
+        return $this->productRepository->getCount($userId);
     }
 }

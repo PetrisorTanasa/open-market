@@ -3,12 +3,147 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        select {
+            width: 200px;
+            height: 30px;
+            background-color: #f2f2f2;
+            color: white;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 20px;
+            background-position: right center;
+            background-repeat: no-repeat;
+        }
+
+        option {
+            background-color: #f2f2f2;
+            color: #000000;
+        }
+        body {
+            background-color: #857575;
+            overflow-x: hidden;
+        }
+        /* Hide default scrollbar */
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        /* Track */
+        body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        body::-webkit-scrollbar-thumb {
+            background: #262525;
+            border-radius: 4px;
+        }
+
+        /* Handle on hover */
+        body::-webkit-scrollbar-thumb:hover {
+            background: #555;
+            overflow-x: hidden;
+        }
+
+        /* Style the button */
+        button {
+            min-width: 100px;
+            background-color: #939393; /* Light gray background color */
+            color: #484848; /* Black text color */
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.2s ease; /* Add a smooth transition effect */
+        }
+
+        /* Style the button on hover */
+        button:hover {
+            background-color: #d9d9d9; /* Slightly darker gray background color on hover */
+        }
+        textarea {
+            width: 100%; /* Expand the textarea to fill the container's width */
+            height: 100%; /* Expand the textarea to fill the container's height */
+            resize: none; /* Disable textarea resizing by the user */
+            overflow: hidden; /* Hide any overflowing content inside the textarea */
+            box-sizing: border-box; /* Include padding and border in the textarea's dimensions */
+        }
+    </style>
 </head>
 <body>
+
+<nav class="navbar navbar-inverse"
+style="
+  position: fixed; /* Set the position to fixed */
+  top: 0; /* Stick the navbar to the top of the viewport */
+  left: 0;
+  right: 0;
+  z-index: 100;
+">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" {% if app.user is defined %}href="{{ path('home') }}"{% endif %}>Open Market</a>
+        </div>
+
+        {% if app.user.language is defined %}
+        <ul class="nav navbar-nav">
+            <li><a href="/product/create">{{ 'Create Product' | trans }}</a></li>
+            <li><a href="/profile">{{ 'Profile' | trans }}</a></li>
+        </ul>
+        {% endif %}
+        <ul class="nav navbar-nav navbar-right">
+
+            {% if app.user.language is not defined %}
+            <li><a href="/register"><span class="glyphicon glyphicon-user"></span> {{ 'Sign Up' |trans }}</a></li>
+            <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> {{ 'Login' | trans }}</a></li>
+            {% else %}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ 'Select Language' | trans }}
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/language_update?language=en">{{ 'English' | trans  }}</a></li>
+                            <li><a href="/language_update?language=fr">{{ 'French' | trans  }}</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> {{ 'Logout' | trans }}</a></li>
+{#                <li>#}
+{#                <select id="languageDropdown" onchange="changeLanguage(this)" >#}
+{#                    <option value="en" {% if app.user.language == 'en' %}selected{% endif %}></option>#}
+{#                    <option value="fr" {% if app.user.language == 'fr' %}selected{% endif %}></option>#}
+{#                    #}{# Add more supported languages as needed #}
+{#                </select>#}
+{#                </li>#}
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<script>
+    // function changeLanguage(dropdown) {
+    //     const language = dropdown.value;
+    //
+    //     // Send the language preference to the server using a fetch API call
+    //     fetch('/language_update?language=' + language, {
+    //         method: 'GET',
+    //     }).then(response => {
+    //         console.log(response);
+    //         if (response.ok) {
+    //             console.log('Language updated successfully!');
+    //             location.reload();
+    //         } else {
+    //             console.error('An error occurred while updating the language.');
+    //         }
+    //     }).catch(error => {
+    //         console.error('An error occurred while updating the language.', error);
+    //     });
+    // }
+</script>
+<br><br><br>
 {% block body %}{% endblock %}
 
 {% block javascripts %}{% endblock %}

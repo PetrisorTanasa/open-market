@@ -1,12 +1,63 @@
-{# templates/product/update.html.twig #}
+{# templates/product/create.html.twig #}
 
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Update Product</h1>
+    <style>
+        input[type=text], select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit">Update</button>
-    {{ form_end(form) }}
+        input[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <div style="
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+    width: 30%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+">
+    <h1>{{ 'Update Product' | trans }}</h1>
+    <form method="post">
+        <label for="{{ form.product.vars.id }}">{{ 'Product' | trans }}:</label>
+        <br>
+        {{ form_widget(form.product) }}
+        <br>
+        <label for="{{ form.quantity.vars.id }}">{{ 'Quantity' | trans }}:</label>
+        <br>
+        {{ form_widget(form.quantity) }}
+        <br>
+        <label for="{{ form.price.vars.id }}">{{ 'Price' | trans }}:</label>
+        <br>
+        {{ form_widget(form.price) }}
+        <br>
+        <label for="{{ form.description.vars.id }}">{{ 'Description' | trans }}:</label>
+        <br>
+        {{ form_widget(form.description) }}
+        <br>
+        <button type="submit">{{ 'Create Product' | trans }}</button>
+        {{ form_rest(form) }}
+    </form>
+    </div>
 {% endblock %}

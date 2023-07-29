@@ -19,9 +19,11 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-#    App\Services\ProductService:
-#        arguments:
-#            $entityManager: '@doctrine'
+    App\EventListener\LocaleListener:
+        tags:
+            - { name: kernel.event_subscriber }
+    App\Security\AccessDeniedHandler:
+        arguments: [ '@router' ]
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

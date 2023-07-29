@@ -1,0 +1,35 @@
+{# templates/profile/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'User Profile' | trans }}{% endblock %}
+
+{% block body %}
+<div style="
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+    width: 40%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+" xmlns="http://www.w3.org/1999/html">
+    <h1>{{ 'User Profile' | trans }}</h1>
+    <dl>
+        <dt>{{ 'Email' | trans }}:</dt>
+        <dd>{{ app.user.email }}</dd>
+
+        <dt>{{ 'Name' | trans }}:</dt>
+        <dd>{{ app.user.firstName }} {{ app.user.lastName }}</dd>
+
+        <dt>{{ 'Language' | trans }}:</dt>
+        {% if app.user.language == 'fr' %}
+            <dd>Français</dd>
+        {% else %}
+            <dd>English</dd>
+        {% endif %}
+<br><br>
+        <button onclick="window.location.href ='{{ path('profile_edit') }}'" >{{ 'Edit Profile' | trans }}</button>
+        {# Add more fields here based on your user entity properties #}
+    </dl>
+</div>
+{% endblock %}

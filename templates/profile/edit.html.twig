@@ -4,22 +4,45 @@
 {% block title %}Edit Profile{% endblock %}
 
 {% block body %}
-    <h1>Edit Profile</h1>
+    <style>
+        input[type=text], select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <div style="
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+    width: 30%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+">
+    <h1>{{ 'Edit Profile' | trans }}</h1>
     {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button type="submit">Update</button>
+    <button type="submit">{{ 'Update' | trans }}</button>
     {{ form_end(form) }}
-{% endblock %}
-
-{# templates/profile/show.html.twig #}
-{% extends 'base.html.twig' %}
-
-{% block title %}User Profile{% endblock %}
-
-{% block body %}
-    <h1>User Profile</h1>
-    <p>First Name: {{ user.profile.firstName }}</p>
-    <p>Last Name: {{ user.profile.lastName }}</p>
-    {# Add more profile fields here if needed #}
-    <a href="{{ path('profile_edit') }}">Edit Profile</a>
+    </div>
 {% endblock %}

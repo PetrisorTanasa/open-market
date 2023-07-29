@@ -1,0 +1,51 @@
+# templates/profile/show.html.twig
+Name: Nom
+Email: Courriel
+Language: Langue
+Edit Profile: Modifier le profil
+User Profile: Profil de l'utilisateur
+
+# templates/product/create.html.twig
+Product: Produit
+Quantity: Quantité
+Price: Prix
+Description: Description
+Create Product: Créer un produit
+
+# templates/home/index.html.twig
+English: Anglais
+French: Français
+Actions: Actions
+Update: Mettre à jour
+Delete: Supprimer
+No records found: Aucun enregistrement trouvé
+Showing: Affichage
+to: à
+of: de
+entries: entrées
+filtered: filtré
+from: de
+total: total
+Search: Recherche
+First: Premier
+Last: Dernier
+Next: Suivant
+Previous: Précédent
+Show: Afficher
+
+# templates/product/create.html.twig
+Update Product: Mettre à jour le produit
+
+Sign up: S'inscrire
+Login: Se connecter
+Logout: Se déconnecter
+
+Select Language: Sélectionnez la langue
+Profile: Profil
+
+Last name: Nom de famille
+First name: Prénom
+
+Password: Mot de passe
+
+Please sing in: Veuillez vous connecter

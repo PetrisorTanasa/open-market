@@ -32,7 +32,7 @@ class ProductRepository extends ServiceEntityRepository
         $entityManager->flush();
     }
 
-    public function readProduct(int $userId, array $orderBy, string $search)
+    public function readProduct(int $userId, array $orderBy, string $search, int $page, int $limit)
     {
         $entityManager = $this->entityManager->getManager();
 
@@ -43,7 +43,21 @@ class ProductRepository extends ServiceEntityRepository
         if($search != "") {
             $queryBuilder->where('p.product LIKE \'%' . $search . '%\'');
         }
-        $query = $queryBuilder->getQuery();
-        return $query->getResult();
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function deleteProduct(int $productId)
+    {
+        $entityManager = $this->entityManager->getManager();
+        $product = $entityManager->getRepository(Product::class)->find($productId);
+        $entityManager->remove($product);
+        $entityManager->flush();
+    }
+
+    public function getCount(int $userId)
+    {
+        $entityManager = $this->entityManager->getRepository(Product::class)->findBy(["user_id" => $userId]);
+        return count($entityManager);
     }
 }

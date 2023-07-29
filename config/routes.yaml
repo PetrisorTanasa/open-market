@@ -3,3 +3,15 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+app_login:
+    path: /login
+    controller: App\Controller\LoginController::login
+# config/routes.yaml
+
+# Your other routes here...
+
+# Set /home as the default route
+index:
+    path: /
+    defaults:
+        _controller: App\Controller\HomeController::index

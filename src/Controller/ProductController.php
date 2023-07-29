@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,6 @@ class ProductController extends AbstractController
 
     public function __construct(
         TokenStorageInterface $tokenStorage,
-        ProductService $productService,
         ManagerRegistry $managerRegistry
     )
     {
@@ -65,6 +65,9 @@ class ProductController extends AbstractController
         $order = $allParameters['order'] ?? [];
         $searchTerm = $allParameters['search']['value'] ?? null;
 
+        $pageNumber = $request->query->getInt('page', 1);
+        $recordsPerPage = $request->query->getInt('records_per_page', 10);
+
         $orderBy = [];
         foreach ($order as $orderItem) {
             $columnIdx = $orderItem['column'] ?? null;
@@ -72,21 +75,30 @@ class ProductController extends AbstractController
 
             if (isset($columns[$columnIdx]['data']) && in_array($dir, ['asc', 'desc'])) {
                 $column = $columns[$columnIdx]['data'];
-                // Map the column data to the actual entity field names as needed
-                // For example, if your column 'data' is 'product', but the actual entity field is 'name',
-                // then you should map it here.
                 $orderBy[$column] = $dir;
             }
         }
+        $totalCount = $this->productService->getCount(
+            $this->user->getId()
+        );
 
         $data = $this->productService->readProduct(
             $this->user->getId(),
             $orderBy ?? [],
-            $searchTerm ?? ""
+            $searchTerm ?? "",
+            $pageNumber,
+            $recordsPerPage
         );
 
+        $paginatedData = array_slice($data, ($pageNumber - 1) * $recordsPerPage, $pageNumber * $recordsPerPage);
+
         return $this->json([
-            'data' => $data,
+            'data' => $paginatedData,
+            'totalRecords' => $totalCount,
+            'recordsTotal' => $totalCount,
+            'recordsFiltered' => count($data), // You can update this if you perform filtering
+            'totalPages' => ceil($totalCount/$recordsPerPage),
+            'draw' => $request->query->getInt('draw', 1),
         ]);
     }
 
@@ -108,11 +120,11 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/product/delete', name: 'app_product_delete')]
-    public function productDelete(): Response
+    #[Route('/product/{id}/delete', name: 'app_product_delete')]
+    public function productDelete(Request $request)
     {
-        return $this->render('product/delete.html.twig', [
-            'controller_name' => 'ProductController',
-        ]);
+        $productId = $request->request->get('id');
+        $this->productService->deleteProduct($productId);
+        return $this->redirectToRoute('home');
     }
 }
